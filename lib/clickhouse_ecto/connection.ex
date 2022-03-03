@@ -148,7 +148,7 @@ defmodule ClickhouseEcto.Connection do
   @doc false
   def delete_all(query), do: SQL.delete_all(query)
 
-  def insert(prefix, table, header, rows, on_conflict, returning, _opts),
+  def insert(prefix, table, header, rows, on_conflict, returning, _opts \\ []),
     do: SQL.insert(prefix, table, header, rows, on_conflict, returning)
 
   def update(prefix, table, fields, filters, returning),

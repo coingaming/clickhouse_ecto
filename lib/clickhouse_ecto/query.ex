@@ -43,7 +43,9 @@ defmodule ClickhouseEcto.Query do
           on_conflict :: Ecto.Adapter.on_conflict(),
           returning :: [atom]
         ) :: String.t()
-  def insert(prefix, table, header, rows, _on_conflict, _returning) do
+  def insert(prefix, table, header, rows, _on_conflict, _returning, placeholders \\ []) do
+    counter_offset = length(placeholders) + 1
+
     included_fields =
       header
       |> Enum.filter(fn value -> Enum.any?(rows, fn row -> value in row end) end)
@@ -65,7 +67,7 @@ defmodule ClickhouseEcto.Query do
       fields,
       ")",
       " VALUES ",
-      insert_all(included_rows, 1)
+      insert_all(included_rows, counter_offset)
     ]
 
     IO.iodata_to_binary(query)

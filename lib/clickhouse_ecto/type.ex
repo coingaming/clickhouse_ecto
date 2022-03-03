@@ -44,7 +44,7 @@ defmodule ClickhouseEcto.Type do
 
   def decode(value, type)
       when type in @decimal_types do
-    {:ok, Decimal.new(value)}
+    {:ok, Decimal.from_float(value)}
   end
 
   def decode(value, :uuid) do
