@@ -26,7 +26,16 @@ defmodule ClickhouseEcto do
   def loaders(ecto_type, type), do: [&decode(&1, ecto_type), type]
 
   ## Migration
+  @impl Ecto.Adapter.Migration
   def supports_ddl_transaction?, do: Migration.supports_ddl_transaction?()
+
+  @impl Ecto.Adapter.Migration
+  def lock_for_migrations(_meta, _options, f), do: f.()
+
+  @impl Ecto.Adapter.Migration
+  def execute_ddl(meta, definition, opts) do
+    Ecto.Adapters.SQL.execute_ddl(meta, @conn, definition, opts)
+  end
 
   ## Storage
   @impl Ecto.Adapter.Storage
