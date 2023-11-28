@@ -24,6 +24,10 @@ defmodule ClickhouseEcto.Type do
     {:ok, value}
   end
 
+  def decode(nil, _type) do
+    {:ok, nil}
+  end
+
   def decode(value, type)
       when type in @int_types and is_binary(value) do
     case Integer.parse(value) do
